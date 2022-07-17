@@ -3,7 +3,7 @@
 function readFile(input) {
     var file = input.files[0];
 
-    file.arrayBuffer().then(function foo(wholeFile) {
+    file.arrayBuffer().then(function parseHeader(wholeFile) {
 
         var utf8 = document.getElementById("encoding").checked;
         var readChar = utf8 ? readUtf8 : readAscii;
@@ -22,6 +22,7 @@ function readFile(input) {
         var playAddress = view.getUint16(10);
         var stackPointer = view.getUint16(12);
 
+        // unused
         var timerModulo = view.getUint8(14);
         var timerControl = view.getUint8(15);
         console.log("timerModulo", timerModulo, "timerControl", timerControl);
@@ -63,12 +64,10 @@ Default subsong:  ${firstSong}
 
 function readAscii(buffer) {
     var view = new Uint8Array(buffer);
+    var len = length(view);
     var text = "";
-    for (var i = 0; i < view.length; i++) {
+    for (var i = 0; i < len; i++) {
         var ch = String.fromCharCode( view[i] );
-        if (ch == '\0') {
-            break;
-        }
         text = text + ch;
     }
     return text;
@@ -81,7 +80,8 @@ function readUtf8(buffer) {
     return decoder.decode(view.slice(0, nullOffset));
 }
 
-// returns offset for NULL-character
+// returns offset for NULL-character if found
+// else, return last index of string
 function length(view) {
     for (var i = 0; i < view.length; i++) {
         var ch = String.fromCharCode( view[i] );
