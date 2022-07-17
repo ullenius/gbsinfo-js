@@ -4,7 +4,7 @@ var {
     fail, assert, assertEquals, assertStrictEquals, tests
 } = require("./punytest.js");
 
-var gbsinfo = require("../gbs.js");
+var gbsinfo = require("../gbsinfo.js");
 
 tests({
     "ascii decoding" : function shortLine() {
