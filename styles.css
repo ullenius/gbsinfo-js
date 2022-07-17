@@ -1,5 +1,6 @@
 .dark,
 .dark * {
+        font-family: monospace;
         margin-left: 0.5em;
         background-color: #222;
             color: #e6e6e6;

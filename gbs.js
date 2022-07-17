@@ -4,6 +4,11 @@ function readFile(input) {
     var file = input.files[0];
 
     file.arrayBuffer().then(function foo(wholeFile) {
+
+        var utf8 = document.getElementById("encoding").checked;
+        var readChar = utf8 ? readUtf8 : readAscii;
+        console.log("DEBUG utf8", utf8);
+
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
 
@@ -66,12 +71,8 @@ Default subsong:  ${firstSong}
     });
 }
 
-function readChar(buffer) {
-    var decoder = new TextDecoder("utf-8");
+function readAscii(buffer) {
     var view = new Uint8Array(buffer);
-    var nullOffset = length(view);
-    //console.log("decoder:", decoder.decode(view.slice(0, nullOffset)));
-
     var text = "";
     for (var i = 0; i < view.length; i++) {
         var ch = String.fromCharCode( view[i] );
@@ -81,6 +82,14 @@ function readChar(buffer) {
         text = text + ch;
     }
     return text;
+}
+
+function readUtf8(buffer) {
+    var decoder = new TextDecoder("utf-8");
+    var view = new Uint8Array(buffer);
+    var nullOffset = length(view);
+    //console.log("decoder:", decoder.decode(view.slice(0, nullOffset)));
+    return decoder.decode(view.slice(0, nullOffset));
 }
 
 // returns offset for NULL-character

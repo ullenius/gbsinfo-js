@@ -13,9 +13,13 @@
 </center>
 
 <main>
-<textarea id="gbsHeader", readonly, rows="30", cols="50"></textarea>
+<fieldset>
+    <textarea id="gbsHeader", readonly, rows="30", cols="50"></textarea>
+    <br />
+    <input type="file" onchange="readFile(this)" />
+    <input type="checkbox" id="encoding">
+    <label for="encoding">UTF-8</label>
 </main>
-<input type="file" onchange="readFile(this)" />
 
 </body>
 
