@@ -1,7 +1,7 @@
 # Read Game Boy Sound-files in the browser
 
-* Read and parse gbs-files in the browser.
-Mimics output of the `gbsinfo` tool found in [gbsplay](https://www.github.com/mmitch/gbsplay).
+* Read and parse gbs-file headers in the browser.
+* Mimics output of the `gbsinfo` tool found in [gbsplay](https://www.github.com/mmitch/gbsplay).
 
 ## Features
 * Vanilla JavaScript. No dependencies.
