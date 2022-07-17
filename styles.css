@@ -1,5 +1,6 @@
 .dark,
 .dark * {
+        margin-left: 0.5em;
         background-color: #222;
             color: #e6e6e6;
                 border-color: #e6e6e6;
