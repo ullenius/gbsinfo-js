@@ -10,8 +10,6 @@ Mimics output of the `gbsinfo` tool found in [gbsplay](https://www.github.com/mm
 ## How to use it
 * Select a `.gbs`-file using the GUI.
 
-<img src="spc700.jpg" alt="Screenshot of gbsinfo-js displaying header" title="gbsinfo-js in action">
-
 ## Requirements
 * Browser with ES6-support.
 * Node v8.x or later for running unit tests.
