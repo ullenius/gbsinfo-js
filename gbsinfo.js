@@ -81,7 +81,7 @@ function readUtf8(buffer) {
 }
 
 // returns offset for NULL-character if found
-// else, return last index of string
+// else, return length of string
 function length(view) {
     for (var i = 0; i < view.length; i++) {
         var ch = String.fromCharCode( view[i] );
