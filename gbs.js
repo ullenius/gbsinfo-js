@@ -21,20 +21,20 @@ function readFile(input) {
         var songs = view.getUint8(4);
         var firstSong = view.getUint8(5);
 
-        var loadAddress = readShort(header.slice(6,8));
+        var loadAddress = view.getUint16(6);
         console.log(`load address: 0x${loadAddress.toString(16)}`);
 
-        var initAddress = readShort(header.slice(8,10));
+        var initAddress = view.getUint16(8);
         console.log(`init address: 0x${initAddress.toString(16)}`);
 
-        var playAddress = readShort(header.slice(10,12));
+        var playAddress = view.getUint16(10);
         console.log(`play address: 0x${playAddress.toString(16)}`);
 
-        var stackPointer = readShort(header.slice(12,14));
+        var stackPointer = view.getUint16(12);
         console.log(`stack pointer: 0x${stackPointer.toString(16)}`);
 
-        var timerModulo = readByte(header.slice(14,15));
-        var timerControl = readByte(header.slice(15,16));
+        var timerModulo = view.getUint8(14);
+        var timerControl = view.getUint8(15);
         console.log("timerModulo", timerModulo, "timerControl", timerControl);
 
         var title = readChar(header.slice(16,16+32));
@@ -70,14 +70,4 @@ function readChar(buffer) {
         text = text + ch;
     }
     return text;
-}
-
-function readByte(buffer) {
-    var view = new Uint8Array(buffer);
-    return view[0];
-}
-
-function readShort(buffer) {
-    var view = new Uint16Array(buffer);
-    return view[0];
 }
