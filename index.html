@@ -4,21 +4,20 @@
     <meta charset="utf-8" />
     <title>gbsinfo-js</title>
     <link rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="gbs.js"></script>
+    <script src="gbs.js"></script>
 </head>
 
 <body class="dark">
-<center>
 <h1>gbsinfo-js</h1>
-</center>
 
 <main>
-<fieldset>
-    <textarea id="gbsHeader", readonly, rows="30", cols="50"></textarea>
-    <br />
-    <input type="file" onchange="readFile(this)" />
-    <input type="checkbox" id="encoding">
-    <label for="encoding">UTF-8</label>
+    <fieldset>
+        <textarea id="gbsHeader" readonly rows="30" cols="50"></textarea>
+        <br />
+        <input type="file" accept=".gbs" onchange="readFile(this)" />
+        <input type="checkbox" id="encoding">
+        <label for="encoding">UTF-8</label>
+    </fieldset>
 </main>
 
 </body>
