@@ -21,7 +21,7 @@
 ## Running tests
 Run `node tests/decode.test.js`.
 
-They are written using my fork of [jspunytest](https://www.github.com/ullenius/jspunytest) which is bundled inside `tests/punytest.js`.
+They are written using [jspunytest](https://www.github.com/ullenius/jspunytest) which is bundled inside `tests/punytest.js`.
 
 ## Licence
 GPL 3 only.
