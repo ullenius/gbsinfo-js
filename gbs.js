@@ -1,10 +1,7 @@
 "use strict";
 
 function readFile(input) {
-    console.log(input);
-
     var file = input.files[0];
-    console.log(file.name);
 
     var reader = new FileReader();
     reader.readAsArrayBuffer( file );
@@ -60,7 +57,11 @@ function readFile(input) {
 }
 
 function readChar(buffer) {
+    var decoder = new TextDecoder("utf-8");
     var view = new Uint8Array(buffer);
+    var nullOffset = length(view);
+    //console.log("decoder:", decoder.decode(view.slice(0, nullOffset)));
+
     var text = "";
     for (var i = 0; i < view.length; i++) {
         var ch = String.fromCharCode( view[i] );
@@ -70,4 +71,15 @@ function readChar(buffer) {
         text = text + ch;
     }
     return text;
+}
+
+// returns offset for NULL-character
+function length(view) {
+    for (var i = 0; i < view.length; i++) {
+        var ch = String.fromCharCode( view[i] );
+        if (ch == '\0') {
+            return i;
+        }
+    }
+    return view.length - 1;
 }
