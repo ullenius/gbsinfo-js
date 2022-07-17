@@ -1,4 +1,4 @@
-# gbsinfo - Read Game Boy Sound-files in the browser (GBS)
+# Read Game Boy Sound-files in the browser
 
 * Read and parse gbs-files in the browser.
 Mimics output of the `gbsinfo` tool found in [gbsplay](https://www.github.com/mmitch/gbsplay).
@@ -8,7 +8,9 @@ Mimics output of the `gbsinfo` tool found in [gbsplay](https://www.github.com/mm
 * UTF-8 support.
 
 ## How to use it
-Select a `.gbs`-file using the GUI.
+* Select a `.gbs`-file using the GUI.
+
+<img src="spc700.jpg" alt="Screenshot of gbsinfo-js displaying header" title="gbsinfo-js in action">
 
 ## Requirements
 * Browser with ES6-support.
@@ -24,7 +26,7 @@ GPL 3 only.
 See [COPYING](COPYING).
 
 ### Libraries
-* Uses `jstinytest` (MIT licence) for testing.
+* Uses `jspunytest` (MIT licence) for testing.
 
 ## Se also
 * [gbstag](https://www.github.com/ullenius/gbstag) - similar tool in Java.
