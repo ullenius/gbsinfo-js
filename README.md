@@ -16,7 +16,7 @@
 
 ## Requirements
 * Browser with ES6-support.
-* Node v8.x or later for running unit tests.
+* Node v12.x or later for running unit tests.
 
 ## Running tests
 Run `node tests/decode.test.js`.
