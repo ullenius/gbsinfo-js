@@ -89,5 +89,10 @@ function length(view) {
             return i;
         }
     }
-    return view.length - 1;
+    return view.length;
+}
+
+// required for node unit tests
+if (typeof window === "undefined") {
+    module.exports = { readUtf8, readAscii };
 }
