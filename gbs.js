@@ -48,9 +48,11 @@ function readFile(input) {
         var title = readChar(header.slice(16,16+32));
         console.log("title", title);
 
+        var author = readChar(header.slice(48, 48+32));
+        console.log("author:", author);
 
-      //  console.log(view[0]);
-      //  console.log(view);
+        var copyright = readChar(header.slice(80, 80+32));
+        console.log("copyright:", copyright);
 
     };
 }
