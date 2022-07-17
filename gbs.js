@@ -1,6 +1,5 @@
 "use strict";
 
-
 function readFile(input) {
     console.log(input);
 
@@ -30,7 +29,25 @@ function readFile(input) {
         console.log("first songs", firstSong);
 
         var loadAddress = readShort(header.slice(6,8));
-        console.log("load address:", loadAddress.toString(16));
+        console.log(`load address: 0x${loadAddress.toString(16)}`);
+
+        var initAddress = readShort(header.slice(8,10));
+        console.log(`init address: 0x${initAddress.toString(16)}`);
+
+        var playAddress = readShort(header.slice(10,12));
+        console.log(`play address: 0x${playAddress.toString(16)}`);
+
+        var stackPointer = readShort(header.slice(12,14));
+        console.log(`stack pointer: 0x${stackPointer.toString(16)}`);
+
+        var timerModulo = readByte(header.slice(14,15));
+        var timerControl = readByte(header.slice(15,16));
+
+        console.log("timerModulo", timerModulo, "timerControl", timerControl);
+
+        var title = readChar(header.slice(16,16+32));
+        console.log("title", title);
+
 
       //  console.log(view[0]);
       //  console.log(view);
@@ -43,6 +60,9 @@ function readChar(buffer) {
     var text = "";
     for (var i = 0; i < view.length; i++) {
         var ch = String.fromCharCode( view[i] );
+        if (ch == '\0') {
+            break;
+        }
         text = text + ch;
     }
     return text;
