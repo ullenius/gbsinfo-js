@@ -12,13 +12,14 @@ function readFile(input) {
     reader.onload = function foo() {
         var wholeFile = reader.result;
         var header = wholeFile.slice(0, 0x70);
+        var view = new DataView(header);
 
         console.log("byte length", header.byteLength);
 
         var identifier = readChar(header.slice(0,3));
-        var version = readByte(header.slice(3,4));
-        var songs = readByte(header.slice(4,5));
-        var firstSong = readByte(header.slice(5,6));
+        var version = view.getUint8(3);
+        var songs = view.getUint8(4);
+        var firstSong = view.getUint8(5);
 
         var loadAddress = readShort(header.slice(6,8));
         console.log(`load address: 0x${loadAddress.toString(16)}`);
