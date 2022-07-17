@@ -3,12 +3,16 @@
 * Read and parse gbs-file headers in the browser.
 * Mimics output of the `gbsinfo` tool found in [gbsplay](https://www.github.com/mmitch/gbsplay).
 
+> “Any application that *can* be written in JavaScript, *will* eventually be written in JavaScript.”
+> - Atwood's law
+
 ## Features
 * Vanilla JavaScript. No dependencies.
 * UTF-8 support.
 
 ## How to use it
-* Select a `.gbs`-file using the GUI.
+1. [Open gbsinfo-js](https://ullenius.github.io/gbsinfo-js).
+2. Select a `.gbs`-file using the GUI.
 
 ## Requirements
 * Browser with ES6-support.
