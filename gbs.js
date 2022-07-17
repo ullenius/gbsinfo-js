@@ -12,24 +12,15 @@ function readFile(input) {
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
 
-        console.log("byte length", header.byteLength);
-
         var identifier = readChar(header.slice(0,3));
         var version = view.getUint8(3);
         var songs = view.getUint8(4);
         var firstSong = view.getUint8(5);
 
         var loadAddress = view.getUint16(6);
-        console.log(`load address: 0x${loadAddress.toString(16)}`);
-
         var initAddress = view.getUint16(8);
-        console.log(`init address: 0x${initAddress.toString(16)}`);
-
         var playAddress = view.getUint16(10);
-        console.log(`play address: 0x${playAddress.toString(16)}`);
-
         var stackPointer = view.getUint16(12);
-        console.log(`stack pointer: 0x${stackPointer.toString(16)}`);
 
         var timerModulo = view.getUint8(14);
         var timerControl = view.getUint8(15);
@@ -53,7 +44,6 @@ function readFile(input) {
             "Default subsong" : firstSong
         };
 
-        console.log(gbsHeader);
         var textArea = document.getElementById("gbsHeader");
         textArea.value = `
 GBSVersion:       ${version}
@@ -88,7 +78,6 @@ function readUtf8(buffer) {
     var decoder = new TextDecoder("utf-8");
     var view = new Uint8Array(buffer);
     var nullOffset = length(view);
-    //console.log("decoder:", decoder.decode(view.slice(0, nullOffset)));
     return decoder.decode(view.slice(0, nullOffset));
 }
 
