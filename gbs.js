@@ -13,20 +13,12 @@ function readFile(input) {
         var wholeFile = reader.result;
         var header = wholeFile.slice(0, 0x70);
 
-      //  console.log( header );
         console.log("byte length", header.byteLength);
 
         var identifier = readChar(header.slice(0,3));
-        console.log(identifier);
-
         var version = readByte(header.slice(3,4));
-        console.log("version", version);
-
         var songs = readByte(header.slice(4,5));
-        console.log("no of songs", songs);
-
         var firstSong = readByte(header.slice(5,6));
-        console.log("first songs", firstSong);
 
         var loadAddress = readShort(header.slice(6,8));
         console.log(`load address: 0x${loadAddress.toString(16)}`);
@@ -42,18 +34,27 @@ function readFile(input) {
 
         var timerModulo = readByte(header.slice(14,15));
         var timerControl = readByte(header.slice(15,16));
-
         console.log("timerModulo", timerModulo, "timerControl", timerControl);
 
         var title = readChar(header.slice(16,16+32));
-        console.log("title", title);
-
         var author = readChar(header.slice(48, 48+32));
-        console.log("author:", author);
-
         var copyright = readChar(header.slice(80, 80+32));
-        console.log("copyright:", copyright);
 
+        var gbsHeader = {
+            "Identifier" : identifier,
+            "GBSVersion" : version,
+            "Title" : title,
+            "Author" : author,
+            "Copyright" : copyright,
+            "Load address" : loadAddress,
+            "Init address" : initAddress,
+            "Play address" : playAddress,
+            "Stack pointer" : stackPointer,
+            "Subsongs" : songs,
+            "Default subsong" : firstSong
+        };
+
+        console.log(gbsHeader);
     };
 }
 
