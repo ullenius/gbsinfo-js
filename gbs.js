@@ -3,11 +3,7 @@
 function readFile(input) {
     var file = input.files[0];
 
-    var reader = new FileReader();
-    reader.readAsArrayBuffer( file );
-
-    reader.onload = function foo() {
-        var wholeFile = reader.result;
+    file.arrayBuffer().then(function foo(wholeFile) {
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
 
@@ -53,7 +49,10 @@ function readFile(input) {
         };
 
         console.log(gbsHeader);
-    };
+    }
+    ).catch( function handle(err) {
+        console.log(err);
+    });
 }
 
 function readChar(buffer) {
