@@ -29,7 +29,7 @@ function readFile(input) {
         var author = readChar(header.slice(48, 48+32));
         var copyright = readChar(header.slice(80, 80+32));
         setTextarea( { 
-            version, author, copyright, loadAddress, initAddress,
+            version, title, author, copyright, loadAddress, initAddress,
             stackPointer, songs, firstSong });
     }
     ).catch( function handle(err) {
@@ -39,11 +39,12 @@ function readFile(input) {
 
 function setTextarea(tags) {
     var {
-        version, author, copyright, loadAddress, initAddress, stackPointer,
-        songs, firstSong } = tags || {};
+        version, title, author, copyright, loadAddress, initAddress,
+        stackPointer, songs, firstSong } = tags || {};
         var textArea = document.getElementById("gbsHeader");
         textArea.value = `
 GBSVersion:       ${version}
+Title:            ${title}
 Author:           ${author}
 Copyright:        ${copyright}
 Load address:     0x${loadAddress.toString(16)}
