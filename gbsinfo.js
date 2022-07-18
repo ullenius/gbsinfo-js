@@ -4,7 +4,6 @@ function readFile(input) {
     var file = input.files[0];
 
     file.arrayBuffer().then(function parseHeader(wholeFile) {
-
         var utf8 = document.getElementById("encoding").checked;
         var readChar = utf8 ? readUtf8 : readAscii;
         console.log("DEBUG utf8", utf8);
@@ -12,7 +11,7 @@ function readFile(input) {
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
 
-        var identifier = readChar(header.slice(0,3));
+        var identifier = readChar(header.slice(0,3)); // unused
         var version = view.getUint8(3);
         var songs = view.getUint8(4);
         var firstSong = view.getUint8(5);
@@ -22,29 +21,26 @@ function readFile(input) {
         var playAddress = view.getUint16(10);
         var stackPointer = view.getUint16(12);
 
-        // unused
-        var timerModulo = view.getUint8(14);
-        var timerControl = view.getUint8(15);
+        var timerModulo = view.getUint8(14); // unused
+        var timerControl = view.getUint8(15); // unused
         console.log("timerModulo", timerModulo, "timerControl", timerControl);
 
         var title = readChar(header.slice(16,16+32));
         var author = readChar(header.slice(48, 48+32));
         var copyright = readChar(header.slice(80, 80+32));
+        setTextarea( { 
+            version, author, copyright, loadAddress, initAddress,
+            stackPointer, songs, firstSong });
+    }
+    ).catch( function handle(err) {
+        console.log(err);
+    });
+}
 
-        var gbsHeader = {
-            "Identifier" : identifier,
-            "GBSVersion" : version,
-            "Title" : title,
-            "Author" : author,
-            "Copyright" : copyright,
-            "Load address" : loadAddress,
-            "Init address" : initAddress,
-            "Play address" : playAddress,
-            "Stack pointer" : stackPointer,
-            "Subsongs" : songs,
-            "Default subsong" : firstSong
-        };
-
+function setTextarea(tags) {
+    var {
+        version, author, copyright, loadAddress, initAddress, stackPointer,
+        songs, firstSong } = tags || {};
         var textArea = document.getElementById("gbsHeader");
         textArea.value = `
 GBSVersion:       ${version}
@@ -56,10 +52,6 @@ Stack pointer:    0x${stackPointer.toString(16)}
 Subsongs:         ${songs}
 Default subsong:  ${firstSong}
 `.trimStart();
-    }
-    ).catch( function handle(err) {
-        console.log(err);
-    });
 }
 
 function readAscii(buffer) {
