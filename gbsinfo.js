@@ -3,10 +3,12 @@
 function readFile(input) {
     var file = input.files[0];
 
+    var utf8 = document.getElementById("encoding").checked;
+    var readChar = utf8 ? readUtf8 : readAscii;
+    console.log("DEBUG utf8", utf8);
+    var LITTLE_ENDIAN = true;
+
     file.arrayBuffer().then(function parseHeader(wholeFile) {
-        var utf8 = document.getElementById("encoding").checked;
-        var readChar = utf8 ? readUtf8 : readAscii;
-        console.log("DEBUG utf8", utf8);
 
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
@@ -16,10 +18,10 @@ function readFile(input) {
         var songs = view.getUint8(4);
         var firstSong = view.getUint8(5);
 
-        var loadAddress = view.getUint16(6);
-        var initAddress = view.getUint16(8);
-        var playAddress = view.getUint16(10);
-        var stackPointer = view.getUint16(12);
+        var loadAddress = view.getUint16(6, LITTLE_ENDIAN);
+        var initAddress = view.getUint16(8, LITTLE_ENDIAN);
+        var playAddress = view.getUint16(10, LITTLE_ENDIAN);
+        var stackPointer = view.getUint16(12, LITTLE_ENDIAN);
 
         var timerModulo = view.getUint8(14); // unused
         var timerControl = view.getUint8(15); // unused
@@ -30,7 +32,7 @@ function readFile(input) {
         var copyright = readChar(header.slice(80, 80+32));
         setTextarea( { 
             version, title, author, copyright, loadAddress, initAddress,
-            stackPointer, songs, firstSong });
+            playAddress, stackPointer, songs, firstSong });
     }
     ).catch( function handle(err) {
         console.log(err);
@@ -40,7 +42,7 @@ function readFile(input) {
 function setTextarea(tags) {
     var {
         version, title, author, copyright, loadAddress, initAddress,
-        stackPointer, songs, firstSong } = tags || {};
+        playAddress, stackPointer, songs, firstSong } = tags || {};
         var textArea = document.getElementById("gbsHeader");
         textArea.value = `
 GBSVersion:       ${version}
