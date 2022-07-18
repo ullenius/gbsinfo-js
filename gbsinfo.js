@@ -51,6 +51,7 @@ Author:           ${author}
 Copyright:        ${copyright}
 Load address:     0x${loadAddress.toString(16)}
 Init address:     0x${initAddress.toString(16)}
+Play address:     0x${playAddress.toString(16)}
 Stack pointer:    0x${stackPointer.toString(16)}
 Subsongs:         ${songs}
 Default subsong:  ${firstSong}
