@@ -27,13 +27,11 @@ function readFile(input) {
             author        : readChar(header.slice(48, 48+32)),
             copyright     : readChar(header.slice(80, 80+32))
         };
-        console.log("timerModulo", gbsHeader.timerModulo);
-        console.log("timerControl", gbsHeader.timerControl);
 
         setTextarea( gbsHeader ); 
     }
     ).catch( function handle(err) {
-        console.log(err);
+        console.error(err);
     });
 }
 
