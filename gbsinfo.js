@@ -11,6 +11,8 @@ function readFile(input) {
 
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
+        var timerModulo = view.getUint8(14); // unused
+        var timerControl = view.getUint8(15);
 
         var gbsHeader = {
             identifier    : readChar(header.slice(0,3)), // unused
@@ -21,13 +23,11 @@ function readFile(input) {
             initAddress   : view.getUint16(8,  LITTLE_ENDIAN),
             playAddress   : view.getUint16(10, LITTLE_ENDIAN),
             stackPointer  : view.getUint16(12, LITTLE_ENDIAN),
-            timerModulo   : view.getUint8(14), // unused
-            timerControl  : view.getUint8(15), // unused
             title         : readChar(header.slice(16, 16+32)),
             author        : readChar(header.slice(48, 48+32)),
-            copyright     : readChar(header.slice(80, 80+32))
+            copyright     : readChar(header.slice(80, 80+32)),
+            timing        : interruptRate(timerControl)
         };
-
         setTextarea( gbsHeader ); 
     }
     ).catch( function handle(err) {
@@ -35,10 +35,14 @@ function readFile(input) {
     });
 }
 
+function interruptRate(tac) { // timer modulo
+    return (tac & 0x80) === 0 ? "59.7Hz VBlank" : undefined;
+}
+
 function setTextarea(tags) {
     var {
         version, title, author, copyright, loadAddress, initAddress,
-        playAddress, stackPointer, songs, firstSong } = tags || {};
+        playAddress, stackPointer, songs, firstSong, timing } = tags || {};
         var textArea = document.getElementById("gbsHeader");
         textArea.value = `
 GBSVersion:       ${version}
@@ -51,6 +55,7 @@ Play address:     0x${playAddress.toString(16)}
 Stack pointer:    0x${stackPointer.toString(16)}
 Subsongs:         ${songs}
 Default subsong:  ${firstSong}
+Timing:           ${timing}
 `.trimStart();
 }
 
