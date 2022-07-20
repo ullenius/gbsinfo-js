@@ -80,13 +80,10 @@ function readUtf8(buffer) {
 // returns offset for NULL-character if found
 // else, return length of string
 function length(view) {
-    for (var i = 0; i < view.length; i++) {
-        var ch = String.fromCharCode( view[i] );
-        if (ch == '\0') {
-            return i;
-        }
-    }
-    return view.length;
+    var NULL = 0;
+    var nullPos = view.indexOf(NULL);
+    console.log("nullPos", nullPos);
+    return ~nullPos ? nullPos : view.length;
 }
 
 // required for node unit tests
