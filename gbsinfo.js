@@ -78,11 +78,10 @@ function readUtf8(buffer) {
 }
 
 // returns offset for NULL-character if found
-// else, return length of string
+// else, return length
 function length(view) {
     var NULL = 0;
     var nullPos = view.indexOf(NULL);
-    console.log("nullPos", nullPos);
     return ~nullPos ? nullPos : view.length;
 }
 
