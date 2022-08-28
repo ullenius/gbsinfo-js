@@ -26,7 +26,11 @@ function readFile(input) {
             title         : readChar(header.slice(16, 16+32)),
             author        : readChar(header.slice(48, 48+32)),
             copyright     : readChar(header.slice(80, 80+32)),
-            timing        : interruptRate(timerControl)
+            timing        : interruptRate(
+                { 
+                    tac: timerControl,
+                    tma: timerModulo
+                })
         };
         setTextarea( gbsHeader ); 
     }
@@ -35,8 +39,40 @@ function readFile(input) {
     });
 }
 
-function interruptRate(tac) { // timer modulo
-    return (tac & 0x80) === 0 ? "59.7Hz VBlank" : undefined;
+function interruptRate( { tac, tma } ) { // timer modulo
+    if (tac & 0x04) {
+        var result = gbhwCalcTimerHz(tac, tma);
+        return formatTimer( result );
+    }
+    else if ( (tac & 0x80) === 0) {
+       return "59.7Hz VBlank";
+   }
+   else {
+       return "???"; // TODO add ugetab format
+   }
+}
+
+function formatTimer( result ) {
+    return `${result.toFixed(2)}Hz timer`;
+}
+
+function gbhwCalcTimerHz(tac, tma) {
+    var timertc = tacToCycles( tac );
+    var GBHW_CLOCK = 1 << 22;
+    return GBHW_CLOCK / timertc / (256 - tma);
+}
+
+function tacToCycles( tac ) {
+    var GBHW_CLOCK = 1 << 22;
+
+    var lookup = [
+        GBHW_CLOCK / 4096,
+        GBHW_CLOCK / 262144,
+        GBHW_CLOCK / 65536,
+        GBHW_CLOCK / 16384
+    ];
+    var timertc = lookup[ tac & 3 ];
+    return (tac & 0xF0) == 0x80 ? timertc /= 2 : timertc; // emulate GBC mode
 }
 
 function setTextarea(tags) {
