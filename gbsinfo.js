@@ -9,6 +9,7 @@ function readFile(input) {
         console.log("DEBUG utf8", utf8);
         var LITTLE_ENDIAN = true;
 
+        var fileSize = wholeFile.byteLength;
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
         var timerModulo = view.getUint8(14); // unused
@@ -23,6 +24,7 @@ function readFile(input) {
             initAddress   : view.getUint16(8,  LITTLE_ENDIAN),
             playAddress   : view.getUint16(10, LITTLE_ENDIAN),
             stackPointer  : view.getUint16(12, LITTLE_ENDIAN),
+            file          : { size: fileSize, romSize : fileSize / maxRomSize() },
             title         : readChar(header.slice(16, 16+32)),
             author        : readChar(header.slice(48, 48+32)),
             copyright     : readChar(header.slice(80, 80+32)),
@@ -37,6 +39,10 @@ function readFile(input) {
     ).catch( function handle(err) {
         console.error(err);
     });
+}
+
+function maxRomSize() {
+    return 1 << 14; // 4 megabit (4 mebibytes)
 }
 
 function interruptRate( { tac, tma } ) { // timer modulo
@@ -78,8 +84,10 @@ function tacToCycles( tac ) {
 function setTextarea(tags) {
     var {
         version, title, author, copyright, loadAddress, initAddress,
-        playAddress, stackPointer, songs, firstSong, timing } = tags || {};
+        playAddress, stackPointer, file, songs, firstSong, timing } = tags || {};
         var textArea = document.getElementById("gbsHeader");
+        var fileSize = file.size.toString(16).padStart(8, 0);
+
         textArea.value = `
 GBSVersion:       ${version}
 Title:            ${title}
@@ -89,6 +97,8 @@ Load address:     0x${loadAddress.toString(16).padStart(4, 0)}
 Init address:     0x${initAddress.toString(16).padStart(4, 0)}
 Play address:     0x${playAddress.toString(16)}
 Stack pointer:    0x${stackPointer.toString(16)}
+File size:        0x${fileSize}
+ROM size:         0x${fileSize} (${file.romSize} banks)
 Subsongs:         ${songs}
 Default subsong:  ${firstSong}
 Timing:           ${timing}
