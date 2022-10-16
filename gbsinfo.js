@@ -12,7 +12,7 @@ function readFile(input) {
         var fileSize = wholeFile.byteLength;
         var header = wholeFile.slice(0, 0x70);
         var view = new DataView(header);
-        var timerModulo = view.getUint8(14); // unused
+        var timerModulo = view.getUint8(14);
         var timerControl = view.getUint8(15);
 
         var gbsHeader = {
@@ -24,7 +24,7 @@ function readFile(input) {
             initAddress   : view.getUint16(8,  LITTLE_ENDIAN),
             playAddress   : view.getUint16(10, LITTLE_ENDIAN),
             stackPointer  : view.getUint16(12, LITTLE_ENDIAN),
-            file          : { size: fileSize, romSize : fileSize / maxRomSize() },
+            file          : { size: fileSize, romSize : romSize(fileSize) },
             title         : readChar(header.slice(16, 16+32)),
             author        : readChar(header.slice(48, 48+32)),
             copyright     : readChar(header.slice(80, 80+32)),
@@ -41,8 +41,9 @@ function readFile(input) {
     });
 }
 
-function maxRomSize() {
-    return 1 << 14; // 4 megabit (4 mebibytes)
+function romSize( fileSizeInBytes) {
+    var MAX_ROM_SIZE = 1 << 14; // 4 megabit (4 mebibytes)
+    return fileSizeInBytes / MAX_ROM_SIZE;
 }
 
 function interruptRate( { tac, tma } ) { // timer modulo
@@ -64,12 +65,12 @@ function formatTimer( result ) {
 
 function gbhwCalcTimerHz(tac, tma) {
     var timertc = tacToCycles( tac );
-    var GBHW_CLOCK = 1 << 22;
+    var GBHW_CLOCK = gbhwClock();
     return GBHW_CLOCK / timertc / (256 - tma);
 }
 
 function tacToCycles( tac ) {
-    var GBHW_CLOCK = 1 << 22;
+    var GBHW_CLOCK = gbhwClock();
 
     var lookup = [
         GBHW_CLOCK / 4096,
@@ -79,6 +80,10 @@ function tacToCycles( tac ) {
     ];
     var timertc = lookup[ tac & 3 ];
     return (tac & 0xF0) == 0x80 ? timertc /= 2 : timertc; // emulate GBC mode
+}
+
+function gbhwClock() {
+    return 1 << 22;
 }
 
 function setTextarea(tags) {
@@ -133,5 +138,5 @@ function length(view) {
 
 // required for node unit tests
 if (typeof window === "undefined") {
-    module.exports = { readUtf8, readAscii };
+    module.exports = { readUtf8, readAscii, romSize };
 }

@@ -20,5 +20,14 @@ tests({
         var actual = gbsinfo.readUtf8(buffer);
 
         assertEquals(expected, actual);
+    },
+
+    "calculate rom size" : function bankSize() {
+        var filesize = 1 << 15;
+        var expected = 2;
+        var actual = gbsinfo.romSize( filesize );
+
+        assertStrictEquals(expected, actual);
     }
+
 });
