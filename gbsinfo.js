@@ -22,7 +22,7 @@ function readFile(input) {
             version       : view.getUint8(3),
             songs         : view.getUint8(4),
             firstSong     : view.getUint8(5),
-            loadAddress   : loadAddress = view.getUint16(6,  LITTLE_ENDIAN),
+            loadAddress   : view.getUint16(6,  LITTLE_ENDIAN),
             initAddress   : view.getUint16(8,  LITTLE_ENDIAN),
             playAddress   : view.getUint16(10, LITTLE_ENDIAN),
             stackPointer  : view.getUint16(12, LITTLE_ENDIAN),
