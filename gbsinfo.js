@@ -1,5 +1,7 @@
 "use strict";
 
+const GBHW_CLOCK = 1 << 22;
+
 function readFile(input) {
     var file = input.files[0];
 
@@ -65,13 +67,10 @@ function formatTimer( result ) {
 
 function gbhwCalcTimerHz(tac, tma) {
     var timertc = tacToCycles( tac );
-    var GBHW_CLOCK = gbhwClock();
     return GBHW_CLOCK / timertc / (256 - tma);
 }
 
 function tacToCycles( tac ) {
-    var GBHW_CLOCK = gbhwClock();
-
     var lookup = [
         GBHW_CLOCK / 4096,
         GBHW_CLOCK / 262144,
@@ -79,11 +78,7 @@ function tacToCycles( tac ) {
         GBHW_CLOCK / 16384
     ];
     var timertc = lookup[ tac & 3 ];
-    return (tac & 0xF0) == 0x80 ? timertc /= 2 : timertc; // emulate GBC mode
-}
-
-function gbhwClock() {
-    return 1 << 22;
+    return (tac & 0xF0) == 0x80 ? timertc / 2 : timertc; // emulate GBC mode
 }
 
 function setTextarea(tags) {
