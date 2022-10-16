@@ -31,12 +31,29 @@ tests({
         assertStrictEquals(expected, actual);
     },
 
-    "bank size 3" : function sizeOfRom3banks() {
+    "rom size with 3 banks" : function sizeOfRom3banks() {
         var filesize = 0xC000;
+        var loadAddress = 0x3E70
         var expected = 1 << 16;
 
-        var actual = gbsinfo.romSize( filesize );
-        //assertStrictEquals(expected, actual);
+        var actual = gbsinfo.romSize( filesize, loadAddress );
+        assertStrictEquals(expected, actual);
+    },
+    "bank size simple" : function bankSize2() {
+        var filesize = 1 << 15;
+        var romsize = 0x8000;
+
+        var expected = 2;
+        var actual = gbsinfo.banks( romsize );
+
+        assertStrictEquals(expected, actual);
+    },
+    "bank size 3" : function bankSize3() {
+        var romsize = 1 << 16;
+        var expected = 4;
+        var actual = gbsinfo.banks( romsize );
+
+        assertStrictEquals(expected, actual);
     }
 
 });
