@@ -22,12 +22,20 @@ tests({
         assertEquals(expected, actual);
     },
 
-    "calculate rom size" : function bankSize() {
+    "calculate rom size" : function sizeOfRom() {
         var filesize = 1 << 15;
-        var expected = 2;
+        var expected = 1 << 15;
         var actual = gbsinfo.romSize( filesize );
 
         assertStrictEquals(expected, actual);
+    },
+
+    "bank size 3" : function sizeOfRom3banks() {
+        var filesize = 0xC000;
+        var expected = 1 << 16;
+
+        var actual = gbsinfo.romSize( filesize );
+        //assertStrictEquals(expected, actual);
     }
 
 });

@@ -26,7 +26,11 @@ function readFile(input) {
             initAddress   : view.getUint16(8,  LITTLE_ENDIAN),
             playAddress   : view.getUint16(10, LITTLE_ENDIAN),
             stackPointer  : view.getUint16(12, LITTLE_ENDIAN),
-            file          : { size: fileSize, romSize : romSize(fileSize) },
+            file          : { 
+                                size: fileSize, 
+                                romSize : romSize(fileSize),
+                                banks: banks(romSize)
+                            },
             title         : readChar(header.slice(16, 16+32)),
             author        : readChar(header.slice(48, 48+32)),
             copyright     : readChar(header.slice(80, 80+32)),
@@ -43,9 +47,16 @@ function readFile(input) {
     });
 }
 
-function romSize( fileSizeInBytes) {
+function romSize( fileSizeInBytes ) {
+    var magic = 0x3FFF;
+    var codelen = fileSizeInBytes - 0x20;
+    var romsize = (codelen + magic) & ~magic;
+    return romsize;
+}
+
+function banks( romSize ) {
     var MAX_ROM_SIZE = 1 << 14; // 4 megabit (4 mebibytes)
-    return fileSizeInBytes / MAX_ROM_SIZE;
+    return romSize / MAX_ROM_SIZE;
 }
 
 function interruptRate( { tac, tma } ) { // timer modulo
@@ -98,7 +109,7 @@ Init address:     0x${initAddress.toString(16).padStart(4, 0)}
 Play address:     0x${playAddress.toString(16)}
 Stack pointer:    0x${stackPointer.toString(16)}
 File size:        0x${fileSize}
-ROM size:         0x${fileSize} (${file.romSize} banks)
+ROM size:         0x${file.romSize} (${file.banks} banks)
 Subsongs:         ${songs}
 Default subsong:  ${firstSong}
 Timing:           ${timing}
