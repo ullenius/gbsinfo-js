@@ -22,15 +22,10 @@ function readFile(input) {
             version       : view.getUint8(3),
             songs         : view.getUint8(4),
             firstSong     : view.getUint8(5),
-            loadAddress   : view.getUint16(6,  LITTLE_ENDIAN),
+            loadAddress   : loadAddress = view.getUint16(6,  LITTLE_ENDIAN),
             initAddress   : view.getUint16(8,  LITTLE_ENDIAN),
             playAddress   : view.getUint16(10, LITTLE_ENDIAN),
             stackPointer  : view.getUint16(12, LITTLE_ENDIAN),
-            file          : { 
-                                size: fileSize, 
-                                romSize : romSize(fileSize),
-                                banks: banks(romSize)
-                            },
             title         : readChar(header.slice(16, 16+32)),
             author        : readChar(header.slice(48, 48+32)),
             copyright     : readChar(header.slice(80, 80+32)),
@@ -40,6 +35,11 @@ function readFile(input) {
                     tma: timerModulo
                 })
         };
+        gbsHeader.file = {
+            size: fileSize, 
+            romSize : romSize(fileSize, gbsHeader.loadAddress),
+            banks: banks(romSize)
+        }
         setTextarea( gbsHeader ); 
     }
     ).catch( function handle(err) {
@@ -47,10 +47,13 @@ function readFile(input) {
     });
 }
 
-function romSize( fileSizeInBytes ) {
+function romSize( fileSizeInBytes, loadAddress ) {
+    var romsize = codelen + 0x4000;
+    var HDR_LEN_GBS = 0x70;
+    var codelen = fileSizeInBytes - HDR_LEN_GBS;
     var magic = 0x3FFF;
-    var codelen = fileSizeInBytes - 0x20;
-    var romsize = (codelen + magic) & ~magic;
+
+    var romsize = (codelen + loadAddress + magic) & ~magic;
     return romsize;
 }
 

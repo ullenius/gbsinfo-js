@@ -24,9 +24,10 @@ tests({
 
     "calculate rom size" : function sizeOfRom() {
         var filesize = 1 << 15;
+        var loadAddress = 0x0070;
         var expected = 1 << 15;
-        var actual = gbsinfo.romSize( filesize );
 
+        var actual = gbsinfo.romSize( filesize, loadAddress );
         assertStrictEquals(expected, actual);
     },
 
