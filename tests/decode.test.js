@@ -78,7 +78,26 @@ tests({
     "TAC to cycles game boy color" : function cyclesTestGbc() {
         var arr = dataproviderGbc();
         arr.forEach( assertTacCycles );
+    },
+
+    "interrupt rate VBlank" : function vblank() {
+        var tac = 0;
+        var tma = 0;
+
+        var expected = "59.7Hz VBlank";
+        var actual = gbsinfo.interruptRate( { tac, tma } );
+        assertEquals(expected, actual);
+    },
+
+    "interrupt rate other" : function interruptRateCustom() {
+        var tac = 132;
+        var tma = 192;
+
+        var expected = "128.00Hz timer";
+        var actual = gbsinfo.interruptRate( { tac, tma } );
+        assertEquals(expected, actual);
     }
+
 });
 
 function dataprovider() {

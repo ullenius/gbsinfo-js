@@ -17,6 +17,9 @@ function readFile(input) {
         var timerModulo = view.getUint8(14);
         var timerControl = view.getUint8(15);
 
+        console.log("debug - tac:" , timerControl);
+        console.log("debug - tma:" , timerModulo);
+
         var gbsHeader = {
             identifier    : readChar(header.slice(0,3)), // unused
             version       : view.getUint8(3),
@@ -148,6 +151,7 @@ function length(view) {
 // required for node unit tests
 if (typeof window === "undefined") {
     module.exports = { 
-        readUtf8, readAscii, romSize, banks, formatTimer, length, tacToCycles
+        readUtf8, readAscii, romSize, banks, formatTimer, length, tacToCycles,
+        interruptRate
     };
 }
