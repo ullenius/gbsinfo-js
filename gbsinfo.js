@@ -1,5 +1,36 @@
 "use strict";
-
+/*
+ * This file is part of gbsinfo
+ *
+ * gbsinfo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation version 3.
+ *
+ * gbsinfo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ----------------------------
+ * gbsplay is a Gameboy sound player
+ *
+ * (C) 2003-2021 by Tobias Diedrich <ranma+gbsplay@tdiedrich.de>
+ *                 Christian Garbs <mitch@cgarbs.de>
+ *                 Maximilian Rehkopf <otakon@gmx.net>
+ *                 Vegard Nossum <vegardno@ifi.uio.no>
+ * ----------------------------
+ *
+ * The following code is a derivative work of the code from the gbsplay project,
+ * which is licensed GPLv3.
+ *
+ * This code therefore is licensed under the terms of the
+ * GNU Public License, version 3.
+ *
+ * GPL-3.0-only
+*/
 const GBHW_CLOCK = 1 << 22;
 
 function readFile(input) {
@@ -68,13 +99,16 @@ function banks( romSizeBytes ) {
 function interruptRate( { tac, tma } ) { // timer modulo
     if (tac & 0x04) {
         var result = gbhwCalcTimerHz(tac, tma);
-        return formatTimer( result );
+
+        var ugetab = tac & 0x78 === 0x40;
+        var val = formatTimer( result );
+        return ugetab ? `${val} + VBlank (ugetab)` : val;
     }
     else if ( (tac & 0x80) === 0) {
        return "59.7Hz VBlank";
    }
    else {
-       return "???"; // TODO add ugetab format
+       throw "Unknown interrupt rate";
    }
 }
 

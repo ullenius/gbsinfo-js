@@ -96,6 +96,15 @@ tests({
         var expected = "128.00Hz timer";
         var actual = gbsinfo.interruptRate( { tac, tma } );
         assertEquals(expected, actual);
+    },
+
+    "interrupt rate ugetab" : function ugetab() {
+        var tac = 196;
+        var tma = 0;
+
+        var expected = "32.00Hz timer + VBlank (ugetab)";
+        var actual = gbsinfo.interruptRate( { tac, tma } );
+        assertEquals(expected, actual);
     }
 
 });

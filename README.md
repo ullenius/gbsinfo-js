@@ -24,7 +24,7 @@ Run `node tests/decode.test.js`.
 They are written using [jspunytest](https://www.github.com/ullenius/jspunytest) which is bundled inside `tests/punytest.js`.
 
 ## Licence
-GPL 3 only.
+GPL-3.0-only.
 See [COPYING](COPYING).
 
 ### Libraries
