@@ -38,8 +38,8 @@ function readFile(input) {
         gbsHeader.file = {
             size: fileSize, 
             romSize : romSize(fileSize, gbsHeader.loadAddress),
-            banks: banks(romSize)
         }
+        gbsHeader.file.banks = banks( gbsHeader.file.romSize );
         setTextarea( gbsHeader ); 
     }
     ).catch( function handle(err) {
@@ -53,13 +53,13 @@ function romSize( fileSizeInBytes, loadAddress ) {
     var codelen = fileSizeInBytes - HDR_LEN_GBS;
     var magic = 0x3FFF;
 
-    var romsize = (codelen + loadAddress + magic) & ~magic;
-    return romsize;
+    var size = (codelen + loadAddress + magic) & ~magic;
+    return size;
 }
 
-function banks( romSize ) {
+function banks( romSizeBytes ) {
     var MAX_ROM_SIZE = 1 << 14; // 4 megabit (4 mebibytes)
-    return romSize / MAX_ROM_SIZE;
+    return romSizeBytes / MAX_ROM_SIZE;
 }
 
 function interruptRate( { tac, tma } ) { // timer modulo
