@@ -68,6 +68,46 @@ tests({
 
         var actual = gbsinfo.length( view );
         assertEquals(expected, actual);
-    }
+    },
 
+    "TAC to cycles test" : function cyclesTest() {
+        var arr = dataprovider();
+        arr.forEach(function test( { tac, expected } ) {
+            var actual = gbsinfo.tacToCycles( tac );
+            assertEquals(expected, actual);
+        });
+    },
+
+    "TAC to cycles game boy color" : function cyclesTestGbc() {
+        var arr = dataproviderGbc();
+        arr.forEach(function test( { tac, expected } ) {
+            var actual = gbsinfo.tacToCycles( tac );
+            assertEquals(expected, actual);
+        });
+    }
 });
+
+function dataprovider() {
+    return [
+        { "tac" : 0, "expected" : 1 << 10 },
+        { "tac" : 1, "expected" : 1 << 4 },
+        { "tac" : 2, "expected" : 1 << 6 },
+        { "tac" : 3, "expected" : 1 << 8 }
+    ];
+}
+
+function dataproviderGbc() {
+    return dataprovider().map( function gbc( element) {
+        return { 
+            "tac" : element.tac | 0x80, 
+            "expected" : element.expected / 2
+        };
+    });
+}
+
+function assertTacCycles( arr ) {
+    arr.forEach(function test( { tac, expected } ) {
+    var actual = gbsinfo.tacToCycles( tac );
+    assertEquals(expected, actual);
+    });
+}
