@@ -147,5 +147,5 @@ function length(view) {
 
 // required for node unit tests
 if (typeof window === "undefined") {
-    module.exports = { readUtf8, readAscii, romSize, banks };
+    module.exports = { readUtf8, readAscii, romSize, banks, formatTimer };
 }

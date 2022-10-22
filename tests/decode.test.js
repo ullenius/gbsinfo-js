@@ -54,6 +54,12 @@ tests({
         var actual = gbsinfo.banks( romsize );
 
         assertStrictEquals(expected, actual);
+    },
+    "timer formatting" : function timerFormatting() {
+        var expected = "3.14Hz timer";
+        var actual = gbsinfo.formatTimer( Math.PI );
+
+        assertEquals(expected, actual);
     }
 
 });
