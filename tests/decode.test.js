@@ -98,8 +98,18 @@ tests({
         assertEquals(expected, actual);
     },
 
-    "interrupt rate ugetab" : function ugetab() {
+    "interrupt rate ugetab ignores GBC mode" : function ugetabGbc() {
         var tac = 196;
+        var tma = 0;
+
+        var expected = "16.00Hz timer + VBlank (ugetab)";
+        var actual = gbsinfo.interruptRate( { tac, tma } );
+        assertEquals(expected, actual);
+    },
+
+    "interrupt rate ugetab" : function ugetab() {
+        var bitmask = ~0x80; // clear GBC-mode bit
+        var tac = 196 & bitmask;
         var tma = 0;
 
         var expected = "16.00Hz timer + VBlank (ugetab)";
