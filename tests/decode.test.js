@@ -72,18 +72,12 @@ tests({
 
     "TAC to cycles test" : function cyclesTest() {
         var arr = dataprovider();
-        arr.forEach(function test( { tac, expected } ) {
-            var actual = gbsinfo.tacToCycles( tac );
-            assertEquals(expected, actual);
-        });
+        arr.forEach( assertTacCycles );
     },
 
     "TAC to cycles game boy color" : function cyclesTestGbc() {
         var arr = dataproviderGbc();
-        arr.forEach(function test( { tac, expected } ) {
-            var actual = gbsinfo.tacToCycles( tac );
-            assertEquals(expected, actual);
-        });
+        arr.forEach( assertTacCycles );
     }
 });
 
@@ -105,9 +99,7 @@ function dataproviderGbc() {
     });
 }
 
-function assertTacCycles( arr ) {
-    arr.forEach(function test( { tac, expected } ) {
+function assertTacCycles( { tac, expected } ) {
     var actual = gbsinfo.tacToCycles( tac );
     assertEquals(expected, actual);
-    });
 }
