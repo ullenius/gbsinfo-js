@@ -89,11 +89,20 @@ tests({
         assertEquals(expected, actual);
     },
 
-    "interrupt rate other" : function interruptRateCustom() {
-        var tac = 132;
+    "interrupt rate other GBC" : function interruptRateCustomGbc() {
+        var tac = 4 | 1 << 7; // timer + GBC-bit
         var tma = 192;
 
         var expected = "128.00Hz timer";
+        var actual = gbsinfo.interruptRate( { tac, tma } );
+        assertEquals(expected, actual);
+    },
+
+    "interrupt rate other GB" : function interruptRateCustom() {
+        var tac = 4; // use timer
+        var tma = 192;
+
+        var expected = "64.00Hz timer";
         var actual = gbsinfo.interruptRate( { tac, tma } );
         assertEquals(expected, actual);
     },
