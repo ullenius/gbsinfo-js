@@ -60,6 +60,14 @@ tests({
         var actual = gbsinfo.formatTimer( Math.PI );
 
         assertEquals(expected, actual);
+    },
+
+    "length of binary-view test" : function viewLength() {
+        var view = new Uint8Array( [ 1, 42, 777, 255, 0, 0, 0 ] );
+        var expected = 4;
+
+        var actual = gbsinfo.length( view );
+        assertEquals(expected, actual);
     }
 
 });
