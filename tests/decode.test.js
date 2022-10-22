@@ -102,7 +102,7 @@ tests({
         var tac = 196;
         var tma = 0;
 
-        var expected = "32.00Hz timer + VBlank (ugetab)";
+        var expected = "16.00Hz timer + VBlank (ugetab)";
         var actual = gbsinfo.interruptRate( { tac, tma } );
         assertEquals(expected, actual);
     }

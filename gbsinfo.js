@@ -100,7 +100,7 @@ function interruptRate( { tac, tma } ) { // timer modulo
     if (tac & 0x04) {
         var result = gbhwCalcTimerHz(tac, tma);
 
-        var ugetab = tac & 0x78 === 0x40;
+        var ugetab = (tac & 0x78) === 0x40;
         var val = formatTimer( result );
         return ugetab ? `${val} + VBlank (ugetab)` : val;
     }
@@ -123,10 +123,10 @@ function gbhwCalcTimerHz(tac, tma) {
 
 function tacToCycles( tac ) {
     var lookup = [
-        GBHW_CLOCK / 4096,
-        GBHW_CLOCK / 262144,
-        GBHW_CLOCK / 65536,
-        GBHW_CLOCK / 16384
+        GBHW_CLOCK / 4096,    /* 1024 CPU cycles per TIMA tick */
+        GBHW_CLOCK / 262144,  /*   16 CPU cycles per TIMA tick */
+        GBHW_CLOCK / 65536,   /*   64 CPU cycles per TIMA tick */
+        GBHW_CLOCK / 16384,   /*  256 CPU cycles per TIMA tick */
     ];
     var timertc = lookup[ tac & 3 ];
     return (tac & 0xF0) == 0x80 ? timertc / 2 : timertc; // emulate GBC mode
