@@ -124,6 +124,17 @@ tests({
         var expected = "16.00Hz timer + VBlank (ugetab)";
         var actual = gbsinfo.interruptRate( { tac, tma } );
         assertEquals(expected, actual);
+    },
+
+    "unknown interrupt rate fails" : function unknownInterruptrate() {
+        var tac = 0x80;
+        var tma = 0;
+        try {
+            gbsinfo.interruptRate( { tac, tma } );
+        } catch (err) {
+            assertEquals("Unknown interrupt rate", err.message);
+            assertEquals("Error", err.name);
+        }
     }
 
 });

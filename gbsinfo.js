@@ -108,7 +108,7 @@ function interruptRate( { tac, tma } ) { // timer modulo
        return "59.7Hz VBlank";
    }
    else {
-       throw "Unknown interrupt rate";
+       throw new Error("Unknown interrupt rate");
    }
 }
 
