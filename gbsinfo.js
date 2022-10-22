@@ -104,6 +104,7 @@ function setTextarea(tags) {
         playAddress, stackPointer, file, songs, firstSong, timing } = tags || {};
         var textArea = document.getElementById("gbsHeader");
         var fileSize = file.size.toString(16).padStart(8, 0);
+        var paddedRomSize = file.romSize.toString(16).padStart(8, 0);
 
         textArea.value = `
 GBSVersion:       ${version}
@@ -115,7 +116,7 @@ Init address:     0x${initAddress.toString(16).padStart(4, 0)}
 Play address:     0x${playAddress.toString(16)}
 Stack pointer:    0x${stackPointer.toString(16)}
 File size:        0x${fileSize}
-ROM size:         0x${file.romSize} (${file.banks} banks)
+ROM size:         0x${paddedRomSize} (${file.banks} banks)
 Subsongs:         ${songs}
 Default subsong:  ${firstSong}
 Timing:           ${timing}
