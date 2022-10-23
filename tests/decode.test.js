@@ -1,7 +1,7 @@
 "use strict";
 
 var {
-    fail, assert, assertEquals, assertStrictEquals, tests
+    fail, assert, assertEquals, assertStrictEquals, assertThrows, tests
 } = require("./punytest.js");
 
 var gbsinfo = require("../gbsinfo.js");
@@ -129,12 +129,10 @@ tests({
     "unknown interrupt rate fails" : function unknownInterruptrate() {
         var tac = 0x80;
         var tma = 0;
-        try {
+        var err = assertThrows(Error, function shouldThrow() {
             gbsinfo.interruptRate( { tac, tma } );
-        } catch (err) {
-            assertEquals("Unknown interrupt rate", err.message);
-            assertEquals("Error", err.name);
-        }
+        });
+        assertEquals("Unknown interrupt rate", err.message);
     }
 
 });
