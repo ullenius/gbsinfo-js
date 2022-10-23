@@ -52,7 +52,7 @@ function readFile(input) {
         console.log("debug - tma:" , timerModulo);
 
         var gbsHeader = {
-            identifier    : readChar(header.slice(0,3)), // unused
+            identifier    : readChar(header.slice(0,3)),
             version       : view.getUint8(3),
             songs         : view.getUint8(4),
             firstSong     : view.getUint8(5),
@@ -74,11 +74,19 @@ function readFile(input) {
             romSize : romSize(fileSize, gbsHeader.loadAddress),
         }
         gbsHeader.file.banks = banks( gbsHeader.file.romSize );
-        setTextarea( gbsHeader ); 
+
+        if (!validIdentifier( gbsHeader.identifier )) {
+            var error = `Not a GBS-File: ${file.name}`;
+        }
+        setTextarea( gbsHeader, error );
     }
     ).catch( function handle(err) {
         console.error(err);
     });
+}
+
+function validIdentifier( identifier ) {
+    return identifier === "GBS";
 }
 
 function romSize( fileSizeInBytes, loadAddress ) {
@@ -96,7 +104,7 @@ function banks( romSizeBytes ) {
     return romSizeBytes / MAX_ROM_SIZE;
 }
 
-function interruptRate( { tac, tma } ) { // timer modulo
+function interruptRate( { tac, tma } ) {
     if (tac & 0x04) {
         var result = gbhwCalcTimerHz(tac, tma);
 
@@ -132,15 +140,19 @@ function tacToCycles( tac ) {
     return (tac & 0xF0) == 0x80 ? timertc / 2 : timertc; // emulate GBC mode
 }
 
-function setTextarea(tags) {
-    var {
-        version, title, author, copyright, loadAddress, initAddress,
-        playAddress, stackPointer, file, songs, firstSong, timing } = tags || {};
-        var textArea = document.getElementById("gbsHeader");
-        var fileSize = file.size.toString(16).padStart(8, 0);
-        var paddedRomSize = file.romSize.toString(16).padStart(8, 0);
+function setTextarea(tags, err) {
+    var textArea = document.getElementById("gbsHeader");
+    if (err) {
+        textArea.value = err;
+    }
+    else {
+        var {
+            version, title, author, copyright, loadAddress, initAddress,
+            playAddress, stackPointer, file, songs, firstSong, timing } = tags || {};
+            var fileSize = file.size.toString(16).padStart(8, 0);
+            var paddedRomSize = file.romSize.toString(16).padStart(8, 0);
 
-        textArea.value = `
+            textArea.value = `
 GBSVersion:       ${version}
 Title:            ${title}
 Author:           ${author}
@@ -155,6 +167,7 @@ Subsongs:         ${songs}
 Default subsong:  ${firstSong}
 Timing:           ${timing}
 `.trimStart();
+    }
 }
 
 function readAscii(buffer) {
@@ -187,6 +200,6 @@ function length(view) {
 if (typeof window === "undefined") {
     module.exports = { 
         readUtf8, readAscii, romSize, banks, formatTimer, length, tacToCycles,
-        interruptRate
+        interruptRate, validIdentifier
     };
 }

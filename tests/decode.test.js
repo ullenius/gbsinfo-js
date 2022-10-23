@@ -133,6 +133,11 @@ tests({
             gbsinfo.interruptRate( { tac, tma } );
         });
         assertEquals("Unknown interrupt rate", err.message);
+    },
+
+    "GBS magic number verifier" : function verifyMagicnumber() {
+        assertEquals(true, gbsinfo.validIdentifier("GBS"));
+        assertEquals(false, gbsinfo.validIdentifier("Vgm"));
     }
 
 });
