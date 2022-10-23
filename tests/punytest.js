@@ -85,6 +85,22 @@ var TinyTest = {
         }
     },
 
+    assertThrows : function assertThrows(exception, func) {
+        try {
+            func();
+        } catch (err) {
+            var result = err instanceof exception;
+            if (!result) {
+                throw new Error(
+                    `assertThrows() "${exception.name}" !== "${err.name}"`
+                );
+            }
+            return err;
+        }
+        throw new Error(
+            `assertThrows() expected exception "${exception.name}" but nothing \
+            was thrown`);
+    }
 };
 
 function isBrowser() {
@@ -95,16 +111,16 @@ function isNode() {
     return typeof window === "undefined";
 }
 
-
 var   fail                = TinyTest.fail,
       assert              = TinyTest.assert,
       assertEquals        = TinyTest.assertEquals,
       eq                  = TinyTest.assertEquals, // alias for assertEquals
       assertStrictEquals  = TinyTest.assertStrictEquals,
+      assertThrows        = TinyTest.assertThrows,
       tests               = TinyTest.run;
 
 if (isNode() ) {
     module.exports = { 
-        fail, assert, assertEquals, eq, assertStrictEquals, tests
+        fail, assert, assertEquals, eq, assertStrictEquals, assertThrows, tests
     };
 }
