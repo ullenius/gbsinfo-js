@@ -152,7 +152,6 @@ function validIdentifier( identifier ) {
 }
 
 function romSize( fileSizeInBytes, loadAddress ) {
-    var romsize = codelen + 0x4000;
     var HDR_LEN_GBS = 0x70;
     var codelen = fileSizeInBytes - HDR_LEN_GBS;
     var magic = 0x3FFF;
