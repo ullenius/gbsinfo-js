@@ -48,36 +48,39 @@ if ( isNode() ) {
     var GBS_HEADER_LENGTH = 0x70;
 
     log.debug( args );
-    var file = args[ 2 ];
-
-    if (file) {
-        fs.open( file, "r", function(status, fd) {
-            if (status) {
-                console.error( status.message );
-                return;
-            }
-            var buffer = Buffer.alloc( GBS_HEADER_LENGTH );
-            fs.read(fd, buffer, 0, GBS_HEADER_LENGTH, 0, function read(err, bytes, buffer) {
-                if (err) {
-                    console.error( err );
-                }
-                if (bytes > 0) {
-                    log.debug("bytes read:", bytes);
-                    buffer.arrayBuffer = function foo() {
-                        return Promise.resolve(buffer.buffer);
-                    };
-                    readFile( { "files" : [ buffer ] } );
-                }
-
-                fs.close(fd, function foo(err) {
-                    if (err) {
-                    console.error( err );
-                    }
-                });
-                log.debug("File closed successfully");
-            });
-        });
+    var files = args.slice(2, -3);
+    if (files) {
+        files.forEach( readBinaryFile );
     }
+}
+
+function readBinaryFile( file ) {
+    fs.open( file, "r", function(status, fd) {
+        if (status) {
+            console.error( status.message );
+            return;
+        }
+        var buffer = Buffer.alloc( GBS_HEADER_LENGTH );
+        fs.read(fd, buffer, 0, GBS_HEADER_LENGTH, 0, function read(err, bytes, buffer) {
+            if (err) {
+                console.error( err );
+            }
+            if (bytes > 0) {
+                log.debug("bytes read:", bytes);
+                buffer.arrayBuffer = function foo() {
+                    return Promise.resolve(buffer.buffer);
+                };
+                readFile( { "files" : [ buffer ] } );
+            }
+
+            fs.close(fd, function foo(err) {
+                if (err) {
+                console.error( err );
+                }
+            });
+            log.debug("File closed successfully");
+        });
+    });
 }
 
 function readFile(input) {
