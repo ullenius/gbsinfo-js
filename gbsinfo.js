@@ -32,6 +32,13 @@
  * GPL-3.0-only
 */
 const GBHW_CLOCK = 1 << 22;
+const DEBUG = false;
+const log = { "debug" : function print( ...message ) {
+        if (DEBUG) {
+            console.log("debug - ", message);
+        }
+    }
+};
 
 if ( isNode() ) {
     var process = require("process");
@@ -40,8 +47,7 @@ if ( isNode() ) {
 
     var GBS_HEADER_LENGTH = 0x70;
 
-    console.log( args );
-
+    log.debug( args );
     var file = args[ 2 ];
 
     if (file) {
@@ -56,7 +62,7 @@ if ( isNode() ) {
                     console.error( err );
                 }
                 if (bytes > 0) {
-                    console.log("bytes read:", bytes);
+                    log.debug("bytes read:", bytes);
                     buffer.arrayBuffer = function foo() {
                         return Promise.resolve(buffer.buffer);
                     };
@@ -68,7 +74,7 @@ if ( isNode() ) {
                     console.error( err );
                     }
                 });
-                console.log("File closed successfully");
+                log.debug("File closed successfully");
             });
         });
     }
@@ -79,10 +85,8 @@ function readFile(input) {
     var utf8 = isNode() ? false : document.getElementById("encoding").checked
 
     file.arrayBuffer().then(function parseHeader(wholeFile) {
-        console.log("wholefile", wholeFile);
-
         var readChar = utf8 ? readUtf8 : readAscii;
-        console.log("DEBUG utf8", utf8);
+        log.debug("utf8", utf8);
         var LITTLE_ENDIAN = true;
 
         var fileSize = wholeFile.byteLength;
@@ -91,8 +95,8 @@ function readFile(input) {
         var timerModulo = view.getUint8(14);
         var timerControl = view.getUint8(15);
 
-        console.log("debug - tac:" , timerControl);
-        console.log("debug - tma:" , timerModulo);
+        log.debug("tac:", timerControl);
+        log.debug("tma:", timerModulo);
 
         var gbsHeader = {
             identifier    : readChar(header.slice(0,3)),
