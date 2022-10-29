@@ -11,6 +11,8 @@
 * UTF-8 support.
 
 ## How to use it
+
+### Web version
 1. [Open gbsinfo-js](https://ullenius.github.io/gbsinfo-js).
 2. Select a `.gbs`-file using the GUI.
 
@@ -24,10 +26,32 @@ $ node gbsinfo.js [FILE]...
 For pretty printed JSON:
 
 ```bash
-$ node gbsinfo.js [FILE]... | jq --slurp
+$ node gbsinfo.js [FILE]... | jq
 ```
-
-*Note* Node-version only supports ASCII-format.
+```json
+{
+  "identifier": "GBS",
+  "version": 1,
+  "songs": 14,
+  "firstSong": 1,
+  "loadAddress": 16368,
+  "initAddress": 16368,
+  "playAddress": 16387,
+  "stackPointer": 57344,
+  "title": "Blaster Master: Enemy Below",
+  "author": "Akira Suda",
+  "copyright": "2000 Sunsoft",
+  "timing": "128.00Hz timer",
+  "file": {
+    "size": 112,
+    "romSize": 16384,
+    "banks": 1
+  }
+}
+```
+#### Differences from browser-version
+* Only supports ASCII-format.
+* Number fields are displayed as left-padded hex-values in the web version.
 
 ## Requirements
 * Browser with ES6-support.
