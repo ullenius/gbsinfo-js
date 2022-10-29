@@ -33,11 +33,54 @@
 */
 const GBHW_CLOCK = 1 << 22;
 
+if ( isNode() ) {
+    var process = require("process");
+    var fs = require("fs");
+    var args = process.argv;
+
+    var GBS_HEADER_LENGTH = 0x70;
+
+    console.log( args );
+
+    var file = args[ 2 ];
+
+    if (file) {
+        fs.open( file, "r", function(status, fd) {
+            if (status) {
+                console.error( status.message );
+                return;
+            }
+            var buffer = Buffer.alloc( GBS_HEADER_LENGTH );
+            fs.read(fd, buffer, 0, GBS_HEADER_LENGTH, 0, function read(err, bytes, buffer) {
+                if (err) {
+                    console.error( err );
+                }
+                if (bytes > 0) {
+                    console.log("bytes read:", bytes);
+                    buffer.arrayBuffer = function foo() {
+                        return Promise.resolve(buffer.buffer);
+                    };
+                    readFile( { "files" : [ buffer ] } );
+                }
+
+                fs.close(fd, function foo(err) {
+                    if (err) {
+                    console.error( err );
+                    }
+                });
+                console.log("File closed successfully");
+            });
+        });
+    }
+}
+
 function readFile(input) {
     var file = input.files[0];
+    var utf8 = isNode() ? false : document.getElementById("encoding").checked
 
     file.arrayBuffer().then(function parseHeader(wholeFile) {
-        var utf8 = document.getElementById("encoding").checked;
+        console.log("wholefile", wholeFile);
+
         var readChar = utf8 ? readUtf8 : readAscii;
         console.log("DEBUG utf8", utf8);
         var LITTLE_ENDIAN = true;
@@ -78,7 +121,13 @@ function readFile(input) {
         if (!validIdentifier( gbsHeader.identifier )) {
             var error = `Not a GBS-File: ${file.name}`;
         }
-        setTextarea( gbsHeader, error );
+
+        if ( isNode() ) {
+            console.log( JSON.stringify( gbsHeader ) );
+        }
+        else {
+            setTextarea( gbsHeader, error ); // browser
+        }
     }
     ).catch( function handle(err) {
         console.error(err);
@@ -196,8 +245,12 @@ function length(view) {
     return ~nullPos ? nullPos : view.length;
 }
 
+function isNode() {
+    return typeof window === "undefined";
+}
+
 // required for node unit tests
-if (typeof window === "undefined") {
+if (isNode() ) {
     module.exports = { 
         readUtf8, readAscii, romSize, banks, formatTimer, length, tacToCycles,
         interruptRate, validIdentifier
