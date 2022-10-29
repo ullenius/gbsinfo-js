@@ -1,7 +1,7 @@
 "use strict";
 
 var {
-    fail, assert, assertEquals, assertStrictEquals, assertThrows, tests
+    fail, assertEquals, assertStrictEquals, assertThrows, tests
 } = require("./punytest.js");
 
 var gbsinfo = require("../gbsinfo.js");
@@ -40,7 +40,6 @@ tests({
         assertStrictEquals(expected, actual);
     },
     "bank size simple" : function bankSize2() {
-        var filesize = 1 << 15;
         var romsize = 0x8000;
 
         var expected = 2;
