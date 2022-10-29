@@ -51,7 +51,7 @@ $ node gbsinfo.js [FILE]... | jq
 ```
 #### Differences from browser-version
 * Only supports ASCII-format.
-* Number fields are displayed as left-padded hex-values in the web version.
+* Number fields are displayed as zero-padded hex-values in the web version.
 
 ## Requirements
 * Browser with ES6-support.
