@@ -14,6 +14,21 @@
 1. [Open gbsinfo-js](https://ullenius.github.io/gbsinfo-js).
 2. Select a `.gbs`-file using the GUI.
 
+### Node version
+Output results as JSON:
+
+```bash
+$ node gbsinfo.js [FILE]...
+```
+
+For pretty printed JSON:
+
+```bash
+$ node gbsinfo.js [FILE]... | jq --slurp
+```
+
+*Note* Node-version only supports ASCII-format.
+
 ## Requirements
 * Browser with ES6-support.
 * Node v12.x or later for running unit tests.
