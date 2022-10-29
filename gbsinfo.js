@@ -87,7 +87,7 @@ function readBinaryFile( file ) {
 
 function readFile(input) {
     var file = input.files[0];
-    var utf8 = isNode() ? false : document.getElementById("encoding").checked
+    var utf8 = isNode() ? false : document.getElementById("encoding").checked;
 
     file.arrayBuffer().then(function parseHeader(wholeFile) {
         var readChar = utf8 ? readUtf8 : readAscii;
@@ -124,7 +124,7 @@ function readFile(input) {
         gbsHeader.file = {
             size: fileSize, 
             romSize : romSize(fileSize, gbsHeader.loadAddress),
-        }
+        };
         gbsHeader.file.banks = banks( gbsHeader.file.romSize );
 
         if (!validIdentifier( gbsHeader.identifier )) {
