@@ -26,7 +26,7 @@ $ node gbsinfo.js [FILE]...
 For pretty printed JSON:
 
 ```bash
-$ node gbsinfo.js [FILE]... | jq
+$ node gbsinfo.js blastermaster.gbs | jq
 ```
 ```json
 {
@@ -55,10 +55,10 @@ $ node gbsinfo.js [FILE]... | jq
 
 ## Requirements
 * Browser with ES6-support.
-* Node v12.x or later for running unit tests.
+* Node v12.x or later.
 
 ## Running tests
-Run `node tests/decode.test.js`.
+Run `$ node tests/decode.test.js`.
 
 They are written using [jspunytest](https://www.github.com/ullenius/jspunytest) which is bundled inside `tests/punytest.js`.
 
