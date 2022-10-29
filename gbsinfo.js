@@ -31,6 +31,7 @@
  *
  * GPL-3.0-only
 */
+const GBS_HEADER_LENGTH = 0x70;
 const GBHW_CLOCK = 1 << 22;
 const DEBUG = false;
 const log = { "debug" : function print( ...message ) {
@@ -44,8 +45,6 @@ if ( isNode() ) {
     var process = require("process");
     var fs = require("fs");
     var args = process.argv;
-
-    var GBS_HEADER_LENGTH = 0x70;
 
     log.debug( args );
     var files = args.slice(2);
@@ -68,13 +67,13 @@ function readBinaryFile( file ) {
             }
             if (bytes > 0) {
                 log.debug("bytes read:", bytes);
-                buffer.arrayBuffer = function foo() {
+                buffer.arrayBuffer = function arrayBuffer() {
                     return Promise.resolve(buffer.buffer);
                 };
                 readFile( { "files" : [ buffer ] } );
             }
 
-            fs.close(fd, function foo(err) {
+            fs.close(fd, function handle(err) {
                 if (err) {
                     console.error( err );
                     process.exit(-1);
@@ -95,7 +94,7 @@ function readFile(input) {
         var LITTLE_ENDIAN = true;
 
         var fileSize = wholeFile.byteLength;
-        var header = wholeFile.slice(0, 0x70);
+        var header = wholeFile.slice(0, GBS_HEADER_LENGTH);
         var view = new DataView(header);
         var timerModulo = view.getUint8(14);
         var timerControl = view.getUint8(15);
@@ -152,8 +151,7 @@ function validIdentifier( identifier ) {
 }
 
 function romSize( fileSizeInBytes, loadAddress ) {
-    var HDR_LEN_GBS = 0x70;
-    var codelen = fileSizeInBytes - HDR_LEN_GBS;
+    var codelen = fileSizeInBytes - GBS_HEADER_LENGTH;
     var magic = 0x3FFF;
 
     var size = (codelen + loadAddress + magic) & ~magic;
