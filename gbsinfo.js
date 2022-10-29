@@ -48,7 +48,7 @@ if ( isNode() ) {
     var GBS_HEADER_LENGTH = 0x70;
 
     log.debug( args );
-    var files = args.slice(2, -3);
+    var files = args.slice(2);
     if (files) {
         files.forEach( readBinaryFile );
     }
@@ -64,6 +64,7 @@ function readBinaryFile( file ) {
         fs.read(fd, buffer, 0, GBS_HEADER_LENGTH, 0, function read(err, bytes, buffer) {
             if (err) {
                 console.error( err );
+                process.exit(-1);
             }
             if (bytes > 0) {
                 log.debug("bytes read:", bytes);
@@ -75,7 +76,8 @@ function readBinaryFile( file ) {
 
             fs.close(fd, function foo(err) {
                 if (err) {
-                console.error( err );
+                    console.error( err );
+                    process.exit(-1);
                 }
             });
             log.debug("File closed successfully");
@@ -130,6 +132,10 @@ function readFile(input) {
         }
 
         if ( isNode() ) {
+            if (error) {
+                console.error(error);
+                process.exit(-1);
+            }
             console.log( JSON.stringify( gbsHeader ) );
         }
         else {
