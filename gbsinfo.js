@@ -58,7 +58,7 @@ function readBinaryFile( file ) {
     fs.open( file, "r", function(status, fd) {
         if (status) {
             console.error( status.message );
-            return;
+            process.exit(-1);
         }
         var buffer = Buffer.alloc( GBS_HEADER_LENGTH );
         fs.read(fd, buffer, 0, GBS_HEADER_LENGTH, 0, function read(err, bytes, buffer) {
